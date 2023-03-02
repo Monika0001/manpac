@@ -1,0 +1,2 @@
+28 x 31 for basic dot and wall definition
+56 x 62 for centered dots and accurate wall definition
