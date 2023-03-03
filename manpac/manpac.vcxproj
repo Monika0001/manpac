@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Rai\source\repos\manpac\manpac\SDL2_image\include;C:\Users\Rai\source\repos\manpac\manpac\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Rai\source\repos\manpac\manpac\SDL2_image\lib\x64;C:\Users\Rai\source\repos\manpac\manpac\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Rai\source\repos\manpac\manpac\SDL2_image\include;C:\Users\Rai\source\repos\manpac\manpac\SDL2\include;C:\Users\Rai\source\repos\manpac\manpac\PA\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Rai\source\repos\manpac\manpac\PA\lib;C:\Users\Rai\source\repos\manpac\manpac\SDL2_image\lib\x64;C:\Users\Rai\source\repos\manpac\manpac\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -106,13 +106,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;portaudio.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
