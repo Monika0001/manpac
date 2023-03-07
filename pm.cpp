@@ -45,6 +45,30 @@ int pacManY = TILE_SIZE * 1;
 int eatv = 0;
 bool buffCheck = false;
 
+// Ghost 1
+SDL_Texture* ghostTexture1 = NULL;
+int ghostX1 = TILE_SIZE * 1;
+int ghostY1 = TILE_SIZE * 1;
+int pM1 = 0;
+
+// Ghost 2
+SDL_Texture* ghostTexture2 = NULL;
+int ghostX2 = TILE_SIZE * 1;
+int ghostY2 = TILE_SIZE * 1;
+int pM2 = 0;
+
+// Ghost 3
+SDL_Texture* ghostTexture3 = NULL;
+int ghostX3 = TILE_SIZE * 1;
+int ghostY3 = TILE_SIZE * 1;
+int pM3 = 0;
+
+// Ghost 4
+SDL_Texture* ghostTexture4 = NULL;
+int ghostX4 = TILE_SIZE * 1;
+int ghostY4 = TILE_SIZE * 1;
+int pM4 = 0;
+
 // Map layout
 int map[MAP_HEIGHT][MAP_WIDTH] = {
 {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,},
@@ -74,7 +98,7 @@ int map[MAP_HEIGHT][MAP_WIDTH] = {
 {0,0,0,0,0,0,0,0,0,0,2,4,8,0,0,2,2,4,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,8,0,0,2,2,4,8,0,0,2,0,0,0,0,0,0,0,0,0,0,},
 {0,0,0,0,0,0,0,0,0,0,2,4,0,0,0,2,2,4,0,0,0,2,2,2,2,2,0,0,0,0,2,2,2,2,2,4,0,0,0,2,2,4,0,0,0,2,0,0,0,0,0,0,0,0,0,0,},
 {2,2,2,2,2,2,2,2,2,2,2,4,8,0,0,2,2,4,8,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,4,8,0,0,2,2,4,8,0,0,2,2,2,2,2,2,2,2,2,2,2,},
-{4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,},
+{9,9,9,9,9,9,9,9,9,9,9,4,4,4,4,4,4,4,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,4,4,4,4,4,4,4,9,9,9,9,9,9,9,9,9,9,9,9,9,9,},
 {8,0,8,0,8,0,8,0,8,0,8,4,8,0,8,0,8,4,8,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,4,8,0,8,0,8,4,8,0,8,0,8,0,8,0,8,0,8,0,8,0,},
 {0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,4,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,},
 {0,0,0,0,0,0,0,0,0,0,0,4,8,0,0,0,0,4,8,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,4,8,0,0,0,0,4,8,0,0,0,0,0,0,0,0,0,0,0,0,0,},
@@ -113,7 +137,7 @@ int map[MAP_HEIGHT][MAP_WIDTH] = {
 
 void drawMap(SDL_Renderer* renderer)
 {
-	// Walls, pellets, power pellets, and pacman
+	// Walls, pellets, power pellets, pacman, ghosts
 	for (int y = 0; y < MAP_HEIGHT; y++) {
 		for (int x = 0; x < MAP_WIDTH; x++) {
 			if (map[y][x] == 2) {
@@ -136,6 +160,15 @@ void drawMap(SDL_Renderer* renderer)
 	}
 	SDL_Rect pacManRect = { pacManX + 8, pacManY + 8, TILE_SIZE * 3, TILE_SIZE * 3};
 	SDL_RenderCopy(renderer, pacManTexture, NULL, &pacManRect);
+
+	SDL_Rect ghostRect1 = { ghostX1 + 8, ghostY1 + 8, TILE_SIZE * 3, TILE_SIZE * 3 };
+	SDL_RenderCopy(renderer, ghostTexture1, NULL, &ghostRect1);
+	SDL_Rect ghostRect2 = { ghostX2 + 8, ghostY2 + 8, TILE_SIZE * 3, TILE_SIZE * 3 };
+	SDL_RenderCopy(renderer, ghostTexture1, NULL, &ghostRect2);
+	SDL_Rect ghostRect3 = { ghostX3 + 8, ghostY3 + 8, TILE_SIZE * 3, TILE_SIZE * 3 };
+	SDL_RenderCopy(renderer, ghostTexture1, NULL, &ghostRect3);
+	SDL_Rect ghostRect4 = { ghostX4 + 8, ghostY4 + 8, TILE_SIZE * 3, TILE_SIZE * 3 };
+	SDL_RenderCopy(renderer, ghostTexture1, NULL, &ghostRect4);
 }
 
 void screenUpdate(SDL_Renderer* renderer) {
@@ -300,6 +333,12 @@ int main(int argc, char* args[])
 		}
 		pacManTexture = pacRight;
 
+		ghostTexture1 = IMG_LoadTexture(renderer, "assets/player/ghost.png");
+		if (ghostTexture1 == NULL) {
+			std::cout << "Could not load ghost texture! SDL_Error: " << SDL_GetError() << std::endl;
+			return 1;
+		}
+
 		const Uint8* keys = SDL_GetKeyboardState(NULL);
 
 		// Key states
@@ -366,7 +405,419 @@ int main(int argc, char* args[])
 			Uint32 ticks = SDL_GetTicks();
 			if (ticks >= tickInterval) {
 				tickInterval = ticks + TICK_INTERVAL;
-				printf("x = %d, y = %d, pellet state = %d, xg = %d, yg = %d, xst = %d\n", pacManX, pacManY, map[6][2], pacManX / 16, pacManY / 16, map[(pacManY / 16)][(pacManX / 16)]);
+				//printf("x = %d, y = %d, pellet state = %d, xg = %d, yg = %d, xst = %d\n", pacManX, pacManY, map[6][2], pacManX / 16, pacManY / 16, map[(pacManY / 16)][(pacManX / 16)]);
+				
+				// Ghost 1 position
+				bool rightM1 = false;
+				bool leftM1 = false;
+				bool upM1 = false;
+				bool downM1 = false;
+				int xg1 = ghostX1 / 16;
+				int yg1 = ghostY1 / 16;
+
+				if (map[yg1 - 1][xg1] != 4) {
+					upM1 = false;
+				}
+				else if (pM1 == 2) {
+					upM1 = false;
+				}
+				else {
+					upM1 = true;
+				}
+
+				if (map[yg1 + 1][xg1] != 4) {
+					downM1 = false;
+				}
+				else if (pM1 == 1) {
+					downM1 = false;
+				}
+				else {
+					downM1 = true;
+				}
+
+				if (map[yg1][xg1 - 1] != 4) {
+					leftM1 = false;
+				}
+				else if (pM1 == 4) {
+					leftM1 = false;
+				}
+				else {
+					leftM1 = true;
+				}
+
+				if (map[yg1][xg1 + 1] != 4) {
+					rightM1 = false;
+				}
+				else if (pM1 == 3) {
+					rightM1 = false;
+				}
+				else {
+					rightM1 = true;
+				}
+				int movement = 0;
+				while (movement == 0) {
+					int randN = rand() % 4 + 1;
+					printf("%d", randN);
+					if (randN == 1) {
+						if (upM1 == false) {
+							printf("r");
+						}
+						else {
+							movement = 1;
+						}
+					}
+					else if (randN == 2) {
+						if (downM1 == false) {
+							printf("r");
+						}
+						else {
+							movement = 2;
+						}
+					}
+					else if (randN == 3) {
+						if (leftM1 == false) {
+							printf("r");
+						}
+						else {
+							movement = 3;
+						}
+					}
+					else if (randN == 4) {
+						if (rightM1 == false) {
+							printf("r");
+						}
+						else {
+							movement = 4;
+						}
+					}
+				}
+				printf("\n");
+
+				if (movement == 1) {
+					ghostY1 -= 32;
+				}
+				else if (movement == 2) {
+					ghostY1 += 32;
+				}
+				else if (movement == 3) {
+					ghostX1 -= 32;
+				}
+				else if (movement == 4) {
+					ghostX1 += 32;
+				}
+				pM1 = movement;
+				movement = 0;
+
+
+				// Ghost 2 position
+				bool rightM2 = false;
+				bool leftM2 = false;
+				bool upM2 = false;
+				bool downM2 = false;
+				int xg2 = ghostX2 / 16;
+				int yg2 = ghostY2 / 16;
+
+				if (map[yg2 - 1][xg2] != 4) {
+					upM2 = false;
+				}
+				else if (pM2 == 2) {
+					upM2 = false;
+				}
+				else {
+					upM2 = true;
+				}
+
+				if (map[yg2 + 1][xg2] != 4) {
+					downM2 = false;
+				}
+				else if (pM2 == 1) {
+					downM2 = false;
+				}
+				else {
+					downM2 = true;
+				}
+
+				if (map[yg2][xg2 - 1] != 4) {
+					leftM2 = false;
+				}
+				else if (pM2 == 4) {
+					leftM2 = false;
+				}
+				else {
+					leftM2 = true;
+				}
+
+				if (map[yg2][xg2 + 1] != 4) {
+					rightM2 = false;
+				}
+				else if (pM2 == 3) {
+					rightM2 = false;
+				}
+				else {
+					rightM2 = true;
+				}
+
+				while (movement == 0) {
+					int randN = rand() % 4 + 1;
+					printf("%d", randN);
+					if (randN == 1) {
+						if (upM2 == false) {
+							printf("r");
+						}
+						else {
+							movement = 1;
+						}
+					}
+					else if (randN == 2) {
+						if (downM2 == false) {
+							printf("r");
+						}
+						else {
+							movement = 2;
+						}
+					}
+					else if (randN == 3) {
+						if (leftM2 == false) {
+							printf("r");
+						}
+						else {
+							movement = 3;
+						}
+					}
+					else if (randN == 4) {
+						if (rightM2 == false) {
+							printf("r");
+						}
+						else {
+							movement = 4;
+						}
+					}
+				}
+				printf("\n");
+
+				if (movement == 1) {
+					ghostY2 -= 32;
+				}
+				else if (movement == 2) {
+					ghostY2 += 32;
+				}
+				else if (movement == 3) {
+					ghostX2 -= 32;
+				}
+				else if (movement == 4) {
+					ghostX2 += 32;
+				}
+				pM2 = movement;
+				movement = 0;
+
+
+				// Ghost 3 position
+				bool rightM3 = false;
+				bool leftM3 = false;
+				bool upM3 = false;
+				bool downM3 = false;
+				int xg3 = ghostX3 / 16;
+				int yg3 = ghostY3 / 16;
+
+				if (map[yg3 - 1][xg3] != 4) {
+					upM3 = false;
+				}
+				else if (pM3 == 2) {
+					upM3 = false;
+				}
+				else {
+					upM3 = true;
+				}
+
+				if (map[yg3 + 1][xg3] != 4) {
+					downM3 = false;
+				}
+				else if (pM3 == 1) {
+					downM3 = false;
+				}
+				else {
+					downM3 = true;
+				}
+
+				if (map[yg3][xg3 - 1] != 4) {
+					leftM3 = false;
+				}
+				else if (pM3 == 4) {
+					leftM3 = false;
+				}
+				else {
+					leftM3 = true;
+				}
+
+				if (map[yg3][xg3 + 1] != 4) {
+					rightM3 = false;
+				}
+				else if (pM3 == 3) {
+					rightM3 = false;
+				}
+				else {
+					rightM3 = true;
+				}
+
+				while (movement == 0) {
+					int randN = rand() % 4 + 1;
+					printf("%d", randN);
+					if (randN == 1) {
+						if (upM3 == false) {
+							printf("r");
+						}
+						else {
+							movement = 1;
+						}
+					}
+					else if (randN == 2) {
+						if (downM3 == false) {
+							printf("r");
+						}
+						else {
+							movement = 2;
+						}
+					}
+					else if (randN == 3) {
+						if (leftM3 == false) {
+							printf("r");
+						}
+						else {
+							movement = 3;
+						}
+					}
+					else if (randN == 4) {
+						if (rightM3 == false) {
+							printf("r");
+						}
+						else {
+							movement = 4;
+						}
+					}
+				}
+				printf("\n");
+
+				if (movement == 1) {
+					ghostY3 -= 32;
+				}
+				else if (movement == 2) {
+					ghostY3 += 32;
+				}
+				else if (movement == 3) {
+					ghostX3 -= 32;
+				}
+				else if (movement == 4) {
+					ghostX3 += 32;
+				}
+				pM3 = movement;
+				movement = 0;
+
+
+				// Ghost 4 position
+				bool rightM4 = false;
+				bool leftM4 = false;
+				bool upM4 = false;
+				bool downM4 = false;
+				int xg4 = ghostX4 / 16;
+				int yg4 = ghostY4 / 16;
+
+				if (map[yg4 - 1][xg4] != 4) {
+					upM4 = false;
+				}
+				else if (pM4 == 2) {
+					upM4 = false;
+				}
+				else {
+					upM4 = true;
+				}
+
+				if (map[yg4 + 1][xg4] != 4) {
+					downM4 = false;
+				}
+				else if (pM4 == 1) {
+					downM4 = false;
+				}
+				else {
+					downM4 = true;
+				}
+
+				if (map[yg4][xg4 - 1] != 4) {
+					leftM4 = false;
+				}
+				else if (pM4 == 4) {
+					leftM4 = false;
+				}
+				else {
+					leftM4 = true;
+				}
+
+				if (map[yg4][xg4 + 1] != 4) {
+					rightM4 = false;
+				}
+				else if (pM4 == 3) {
+					rightM4 = false;
+				}
+				else {
+					rightM4 = true;
+				}
+
+				while (movement == 0) {
+					int randN = rand() % 4 + 1;
+					printf("%d", randN);
+					if (randN == 1) {
+						if (upM4 == false) {
+							printf("r");
+						}
+						else {
+							movement = 1;
+						}
+					}
+					else if (randN == 2) {
+						if (downM4 == false) {
+							printf("r");
+						}
+						else {
+							movement = 2;
+						}
+					}
+					else if (randN == 3) {
+						if (leftM4 == false) {
+							printf("r");
+						}
+						else {
+							movement = 3;
+						}
+					}
+					else if (randN == 4) {
+						if (rightM4 == false) {
+							printf("r");
+						}
+						else {
+							movement = 4;
+						}
+					}
+				}
+				printf("\n");
+
+				if (movement == 1) {
+					ghostY4 -= 32;
+				}
+				else if (movement == 2) {
+					ghostY4 += 32;
+				}
+				else if (movement == 3) {
+					ghostX4 -= 32;
+				}
+				else if (movement == 4) {
+					ghostX4 += 32;
+				}
+				pM4 = movement;
+				movement = 0;
+				
+				
+				
+				
+				
 				int xc = pacManX / 16;
 				int yc = pacManY / 16;
 				if (rKeyHeld) {
@@ -376,6 +827,7 @@ int main(int argc, char* args[])
 				if (upKeyHeld) {
 					if (map[yc - 1][xc] != 4) {
 						printf("no");
+						SDL_Delay(160);
 					}
 					else {
 						for (int i = 0; i < 32; i++) {
@@ -392,9 +844,10 @@ int main(int argc, char* args[])
 						}
 					}
 				}
-				if (downKeyHeld) {
+				else if (downKeyHeld) {
 					if (map[yc + 1][xc] != 4) {
 						printf("no");
+						SDL_Delay(160);
 					}
 					else {
 						for (int i = 0; i < 32; i++) {
@@ -411,9 +864,10 @@ int main(int argc, char* args[])
 						}
 					}
 				}
-				if (leftKeyHeld) {
+				else if (leftKeyHeld) {
 					if (map[yc][xc - 1] != 4) {
 						printf("no");
+						SDL_Delay(160);
 					}
 					else {
 						for (int i = 0; i < 32; i++) {
@@ -430,9 +884,10 @@ int main(int argc, char* args[])
 						}
 					}
 				}
-				if (rightKeyHeld) {
+				else if (rightKeyHeld) {
 					if (map[yc][xc + 1] != 4) {
 						printf("no");
+						SDL_Delay(160);
 					}
 					else {
 						for (int i = 0; i < 32; i++) {
@@ -448,6 +903,9 @@ int main(int argc, char* args[])
 							screenUpdate(renderer);
 						}
 					}
+				}
+				else {
+					SDL_Delay(160);
 				}
 				if (map[yc + 1][xc + 1] == 5 || map[yc + 1][xc + 1] == 8) {
 					if (map[yc + 1][xc + 1] == 5) {
@@ -490,6 +948,8 @@ int main(int argc, char* args[])
 					
 				}
 			}
+
+			
 
 				// Clear screen
 				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
