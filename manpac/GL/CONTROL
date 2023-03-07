@@ -1,0 +1,8 @@
+Package: giflib
+Version: 5.2.1
+Port-Version: 3
+Depends: vcpkg-cmake
+Architecture: x64-windows
+Multi-Arch: same
+Abi: ae41f8f22c277686b35a9e449262267cb69cfaac38022629854f3731c6feb9b0
+Description: A library for reading and writing gif images.

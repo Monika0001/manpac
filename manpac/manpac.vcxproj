@@ -71,8 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Rai\source\repos\manpac\manpac\SDL2_image\include;C:\Users\Rai\source\repos\manpac\manpac\SDL2\include;C:\Users\Rai\source\repos\manpac\manpac\PA\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Rai\source\repos\manpac\manpac\PA\lib;C:\Users\Rai\source\repos\manpac\manpac\SDL2_image\lib\x64;C:\Users\Rai\source\repos\manpac\manpac\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Rai\source\repos\manpac\manpac\GL\include;C:\Users\Rai\source\repos\manpac\manpac\SDL2_image\include;C:\Users\Rai\source\repos\manpac\manpac\SDL2\include;C:\Users\Rai\source\repos\manpac\manpac\PA\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Rai\source\repos\manpac\manpac\GL\lib;C:\Users\Rai\source\repos\manpac\manpac\PA\lib;C:\Users\Rai\source\repos\manpac\manpac\SDL2_image\lib\x64;C:\Users\Rai\source\repos\manpac\manpac\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\Users\Rai\source\repos\manpac\manpac\PA\include;C:\Users\Rai\source\repos\manpac\manpac\GL\include;C:\Users\Rai\source\repos\manpac\manpac\SDL2_image\include;C:\Users\Rai\source\repos\manpac\manpac\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Rai\source\repos\manpac\manpac\PA\lib;C:\Users\Rai\source\repos\manpac\manpac\GL\lib;C:\Users\Rai\source\repos\manpac\manpac\SDL2_image\lib\x64;C:\Users\Rai\source\repos\manpac\manpac\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -112,7 +116,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;portaudio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;portaudio.lib;gif.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -123,18 +127,18 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;portaudio.lib;gif.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Documents\01_hello_SDL.cpp" />
-  </ItemGroup>
-  <ItemGroup>
+    <Image Include="..\assets\icon.png" />
     <Image Include="..\icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +146,15 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="manpac.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GL\bin\gif.dll" />
+    <None Include="PA\bin\portaudio.dll" />
+    <None Include="SDL2\lib\x64\SDL2.dll" />
+    <None Include="SDL2_image\lib\x64\SDL2_image.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\pm.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
