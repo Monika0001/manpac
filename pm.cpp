@@ -543,7 +543,7 @@ int main(int argc, char* args[])
 		SDL_Event event;
 		while (!quit) {
 			time++;
-			printf("%u \n", time);
+			//printf("%u \n", time);
 
 			if (time % 90 == 0) {
 				SDL_LoadWAV("assets/ghostT/1.wav", &wavSpec4, &wavBuffer4, &wavLength4);
@@ -978,12 +978,13 @@ int main(int argc, char* args[])
 				
 				int xc = pacManX / 16;
 				int yc = pacManY / 16;
+				printf("%d, %d \n", xc, yc);
 				if (rKeyHeld) {
 					pacManX = 16;
 					pacManY = 16;
 				}
 				if (upKeyHeld) {
-					if (map[yc - 1][xc] != 4) {
+					if (map[yc - 1][xc] != 4 && map[yc - 1][xc] != 9) {
 						//printf("no");
 						for (int i = 0; i < 32; i++) {
 							SDL_Delay(5);
@@ -1007,7 +1008,7 @@ int main(int argc, char* args[])
 					}
 				}
 				else if (downKeyHeld) {
-					if (map[yc + 1][xc] != 4) {
+					if (map[yc + 1][xc] != 4 && map[yc + 1][xc] != 9) {
 						//printf("no");
 						for (int i = 0; i < 32; i++) {
 							SDL_Delay(5);
@@ -1031,7 +1032,7 @@ int main(int argc, char* args[])
 					}
 				}
 				else if (leftKeyHeld) {
-					if (map[yc][xc - 1] != 4) {
+					if (map[yc][xc - 1] != 4 && map[yc][xc - 1] != 9) {
 						//printf("no");
 						for (int i = 0; i < 32; i++) {
 							SDL_Delay(5);
@@ -1055,8 +1056,8 @@ int main(int argc, char* args[])
 					}
 				}
 				else if (rightKeyHeld) {
-					if (map[yc][xc + 1] != 4) {
-						//printf("no");
+					if (map[yc][xc + 1] != 4 && map[yc][xc + 1] != 9) {
+						printf("no");
 						for (int i = 0; i < 32; i++) {
 							SDL_Delay(5);
 							ghostMovement();
@@ -1125,6 +1126,17 @@ int main(int argc, char* args[])
 
 					
 				}
+
+				if (xc == -1 && yc == 27) {
+					pacManX = 51 * 16;
+				}
+
+				if (xc == 53 && yc == 27) {
+					pacManX = 1 * 16;
+				}
+
+
+
 			}
 
 			
