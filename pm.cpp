@@ -47,12 +47,20 @@ bool buffCheck = false;
 
 // Ghost 1
 SDL_Texture* ghostTexture1 = NULL;
+SDL_Texture* ghostRight1 = NULL;
+SDL_Texture* ghostLeft1 = NULL;
+SDL_Texture* ghostUp1 = NULL;
+SDL_Texture* ghostDown1 = NULL;
 int ghostX1 = TILE_SIZE * 1;
 int ghostY1 = TILE_SIZE * 1;
 int pM1 = 0;
 
 // Ghost 2
 SDL_Texture* ghostTexture2 = NULL;
+SDL_Texture* ghostRight2 = NULL;
+SDL_Texture* ghostLeft2 = NULL;
+SDL_Texture* ghostUp2 = NULL;
+SDL_Texture* ghostDown2 = NULL;
 int ghostX2 = TILE_SIZE * 1;
 int ghostY2 = TILE_SIZE * 1;
 int pM2 = 0;
@@ -220,7 +228,7 @@ void drawMap(SDL_Renderer* renderer)
 	SDL_Rect ghostRect1 = { ghostX1 + 8, ghostY1 + 8, TILE_SIZE * 3, TILE_SIZE * 3 };
 	SDL_RenderCopy(renderer, ghostTexture1, NULL, &ghostRect1);
 	SDL_Rect ghostRect2 = { ghostX2 + 8, ghostY2 + 8, TILE_SIZE * 3, TILE_SIZE * 3 };
-	SDL_RenderCopy(renderer, ghostTexture1, NULL, &ghostRect2);
+	SDL_RenderCopy(renderer, ghostTexture2, NULL, &ghostRect2);
 	SDL_Rect ghostRect3 = { ghostX3 + 8, ghostY3 + 8, TILE_SIZE * 3, TILE_SIZE * 3 };
 	SDL_RenderCopy(renderer, ghostTexture1, NULL, &ghostRect3);
 	SDL_Rect ghostRect4 = { ghostX4 + 8, ghostY4 + 8, TILE_SIZE * 3, TILE_SIZE * 3 };
@@ -246,6 +254,11 @@ int main(int argc, char* args[])
 
 	SDL_Init(SDL_INIT_AUDIO);
 
+	//Startup
+	SDL_AudioSpec wavSpec0;
+	Uint32 wavLength0;
+	Uint8* wavBuffer0;
+
 
 	//Eat 1
 	SDL_AudioSpec wavSpec;
@@ -261,6 +274,9 @@ int main(int argc, char* args[])
 	SDL_AudioSpec wavSpec2;
 	Uint32 wavLength2;
 	Uint8* wavBuffer2;
+
+	SDL_LoadWAV("assets/sfx/game_start.wav", &wavSpec0, &wavBuffer0, &wavLength0);
+	SDL_AudioDeviceID deviceId3 = SDL_OpenAudioDevice(NULL, 0, &wavSpec0, NULL, 0);
 
 	SDL_LoadWAV("assets/player/munch_1.wav", &wavSpec, &wavBuffer, &wavLength);
 	SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
@@ -389,11 +405,114 @@ int main(int argc, char* args[])
 		}
 		pacManTexture = pacRight;
 
+		//Ghost Textures
+
 		ghostTexture1 = IMG_LoadTexture(renderer, "assets/player/ghost.png");
 		if (ghostTexture1 == NULL) {
 			std::cout << "Could not load ghost texture! SDL_Error: " << SDL_GetError() << std::endl;
 			return 1;
 		}
+
+		ghostLeft1 = IMG_LoadTexture(renderer, "assets/ghostT/left.png");
+		if (ghostLeft1 == NULL) {
+			std::cout << "Could not load ghost texture! SDL_Error: " << SDL_GetError() << std::endl;
+			return 1;
+		}
+
+		ghostRight1 = IMG_LoadTexture(renderer, "assets/ghostT/right.png");
+		if (ghostRight1 == NULL) {
+			std::cout << "Could not load ghost texture! SDL_Error: " << SDL_GetError() << std::endl;
+			return 1;
+		}
+
+		ghostUp1 = IMG_LoadTexture(renderer, "assets/ghostT/up.png");
+		if (ghostUp1 == NULL) {
+			std::cout << "Could not load ghost texture! SDL_Error: " << SDL_GetError() << std::endl;
+			return 1;
+		}
+
+		ghostDown1 = IMG_LoadTexture(renderer, "assets/ghostT/down.png");
+		if (ghostDown1 == NULL) {
+			std::cout << "Could not load ghost texture! SDL_Error: " << SDL_GetError() << std::endl;
+			return 1;
+		}
+
+		ghostTexture1 = ghostRight1;
+
+
+
+
+		ghostLeft2 = IMG_LoadTexture(renderer, "assets/ghostB/left.png");
+		if (ghostLeft2 == NULL) {
+			std::cout << "Could not load ghost texture! SDL_Error: " << SDL_GetError() << std::endl;
+			return 1;
+		}
+
+		ghostRight2 = IMG_LoadTexture(renderer, "assets/ghostB/right.png");
+		if (ghostRight2 == NULL) {
+			std::cout << "Could not load ghost texture! SDL_Error: " << SDL_GetError() << std::endl;
+			return 1;
+		}
+
+		ghostUp2 = IMG_LoadTexture(renderer, "assets/ghostB/up.png");
+		if (ghostUp2 == NULL) {
+			std::cout << "Could not load ghost texture! SDL_Error: " << SDL_GetError() << std::endl;
+			return 1;
+		}
+
+		ghostDown2 = IMG_LoadTexture(renderer, "assets/ghostB/down.png");
+		if (ghostDown2 == NULL) {
+			std::cout << "Could not load ghost texture! SDL_Error: " << SDL_GetError() << std::endl;
+			return 1;
+		}
+
+		ghostTexture2 = ghostRight2;
+
+
+		// Clear screen
+		
+		int pacX2 = pacManX;
+		int pacY2 = pacManY;
+		
+
+		int success = SDL_QueueAudio(deviceId3, wavBuffer0, wavLength0);
+		SDL_PauseAudioDevice(deviceId3, 0);
+
+		for (int i = 0; i < 32; i++) {
+			SDL_Rect pacManRect2 = { pacX2 - 32, pacY2 + 496, TILE_SIZE * 3, TILE_SIZE * 3 };
+			pacX2 += 32;
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+			SDL_RenderClear(renderer);
+			SDL_RenderCopy(renderer, pacManTexture, NULL, &pacManRect2);
+			SDL_RenderPresent(renderer);
+			SDL_Delay(10);
+		};
+
+		pacX2 = pacManX;
+		pacY2 = pacManY;
+
+		SDL_Delay(400);
+
+		for (int i = 0; i < 32; i++) {
+			SDL_Rect pacManRect2 = { pacX2 + 900, pacY2 + 496, TILE_SIZE * 3, TILE_SIZE * 3 };
+			pacX2 -= 32;
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+			SDL_RenderClear(renderer);
+			SDL_RenderCopy(renderer, pacManTexture, NULL, &pacManRect2);
+			SDL_RenderPresent(renderer);
+			SDL_Delay(10);
+		};
+
+		// Update screen
+		
+
+
+		
+		SDL_Delay(5000);
+		
+
+
+
 
 		const Uint8* keys = SDL_GetKeyboardState(NULL);
 
@@ -520,6 +639,7 @@ int main(int argc, char* args[])
 						}
 						else {
 							movement = 1;
+							ghostTexture1 = ghostUp1;
 						}
 					}
 					else if (randN == 2) {
@@ -528,6 +648,7 @@ int main(int argc, char* args[])
 						}
 						else {
 							movement = 2;
+							ghostTexture1 = ghostDown1;
 						}
 					}
 					else if (randN == 3) {
@@ -536,6 +657,7 @@ int main(int argc, char* args[])
 						}
 						else {
 							movement = 3;
+							ghostTexture1 = ghostLeft1;
 						}
 					}
 					else if (randN == 4) {
@@ -544,6 +666,7 @@ int main(int argc, char* args[])
 						}
 						else {
 							movement = 4;
+							ghostTexture1 = ghostRight1;
 						}
 					}
 				}
@@ -568,6 +691,7 @@ int main(int argc, char* args[])
 				}
 				else {
 					upM2 = true;
+					
 				}
 
 				if (map[yg2 + 1][xg2] != 4) {
@@ -578,6 +702,7 @@ int main(int argc, char* args[])
 				}
 				else {
 					downM2 = true;
+					
 				}
 
 				if (map[yg2][xg2 - 1] != 4) {
@@ -588,6 +713,7 @@ int main(int argc, char* args[])
 				}
 				else {
 					leftM2 = true;
+					
 				}
 
 				if (map[yg2][xg2 + 1] != 4) {
@@ -598,6 +724,7 @@ int main(int argc, char* args[])
 				}
 				else {
 					rightM2 = true;
+					
 				}
 
 				while (movement == 0) {
@@ -609,6 +736,7 @@ int main(int argc, char* args[])
 						}
 						else {
 							movement = 1;
+							ghostTexture2 = ghostUp2;
 						}
 					}
 					else if (randN == 2) {
@@ -617,6 +745,7 @@ int main(int argc, char* args[])
 						}
 						else {
 							movement = 2;
+							ghostTexture2 = ghostDown2;
 						}
 					}
 					else if (randN == 3) {
@@ -625,6 +754,7 @@ int main(int argc, char* args[])
 						}
 						else {
 							movement = 3;
+							ghostTexture2 = ghostLeft2;
 						}
 					}
 					else if (randN == 4) {
@@ -633,6 +763,7 @@ int main(int argc, char* args[])
 						}
 						else {
 							movement = 4;
+							ghostTexture2 = ghostRight2;
 						}
 					}
 				}
