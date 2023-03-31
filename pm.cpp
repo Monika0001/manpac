@@ -199,6 +199,10 @@ void ghostMovement() {
 }
 
 
+
+
+
+
 void drawMap(SDL_Renderer* renderer)
 {
 	// Walls, pellets, power pellets, pacman, ghosts
@@ -251,13 +255,18 @@ void screenUpdate(SDL_Renderer* renderer) {
 int main(int argc, char* args[])
 {
 
-
 	SDL_Init(SDL_INIT_AUDIO);
+	
 
 	//Startup
 	SDL_AudioSpec wavSpec0;
 	Uint32 wavLength0;
 	Uint8* wavBuffer0;
+
+	//G Voice
+	SDL_AudioSpec wavSpec4;
+	Uint32 wavLength4;
+	Uint8* wavBuffer4;
 
 
 	//Eat 1
@@ -284,7 +293,6 @@ int main(int argc, char* args[])
 	SDL_LoadWAV("assets/player/munch_2.wav", &wavSpec1, &wavBuffer1, &wavLength1);
 	SDL_AudioDeviceID deviceId1 = SDL_OpenAudioDevice(NULL, 0, &wavSpec1, NULL, 0);
 
-	
 
 	
 	SDL_Window* window = NULL;
@@ -295,7 +303,7 @@ int main(int argc, char* args[])
 	
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		//printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 	}
 	else
 	{
@@ -303,7 +311,7 @@ int main(int argc, char* args[])
 		window = SDL_CreateWindow("Pac-Man", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		if (window == NULL)
 		{
-			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			//printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		}
 		else
 		{
@@ -312,7 +320,7 @@ int main(int argc, char* args[])
 			SDL_Surface* icon = IMG_Load("assets/icon.png");
 			if (icon == NULL) {
 				std::cout << "Icon could not be loaded! SDL_Error: " << SDL_GetError() << std::endl;
-				printf("no icon lol");
+				//printf("no icon lol");
 			}
 			else {
 				SDL_SetWindowIcon(window, icon);
@@ -478,6 +486,8 @@ int main(int argc, char* args[])
 		int success = SDL_QueueAudio(deviceId3, wavBuffer0, wavLength0);
 		SDL_PauseAudioDevice(deviceId3, 0);
 
+
+
 		for (int i = 0; i < 32; i++) {
 			SDL_Rect pacManRect2 = { pacX2 - 32, pacY2 + 496, TILE_SIZE * 3, TILE_SIZE * 3 };
 			pacX2 += 32;
@@ -508,7 +518,7 @@ int main(int argc, char* args[])
 
 
 		
-		SDL_Delay(5000);
+		SDL_Delay(3000);
 		
 
 
@@ -525,11 +535,24 @@ int main(int argc, char* args[])
 
 		// Timer
 		Uint32 tickInterval = SDL_GetTicks() + TICK_INTERVAL;
+		int time = 0;
+		
 
 		// Game loop
 		bool quit = false;
 		SDL_Event event;
 		while (!quit) {
+			time++;
+			printf("%u \n", time);
+
+			if (time % 90 == 0) {
+				SDL_LoadWAV("assets/ghostT/1.wav", &wavSpec4, &wavBuffer4, &wavLength4);
+				SDL_AudioDeviceID deviceId4 = SDL_OpenAudioDevice(NULL, 0, &wavSpec4, NULL, 0);
+				int success = SDL_QueueAudio(deviceId4, wavBuffer4, wavLength4);
+				SDL_PauseAudioDevice(deviceId4, 0);
+			};
+
+
 			while (SDL_PollEvent(&event) != 0) {
 				if (event.type == SDL_QUIT) {
 					quit = true;
@@ -632,10 +655,10 @@ int main(int argc, char* args[])
 				int movement = 0;
 				while (movement == 0) {
 					int randN = rand() % 4 + 1;
-					printf("%d", randN);
+					//printf("%d", randN);
 					if (randN == 1) {
 						if (upM1 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 1;
@@ -644,7 +667,7 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 2) {
 						if (downM1 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 2;
@@ -653,7 +676,7 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 3) {
 						if (leftM1 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 3;
@@ -662,7 +685,7 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 4) {
 						if (rightM1 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 4;
@@ -670,7 +693,7 @@ int main(int argc, char* args[])
 						}
 					}
 				}
-				printf("\n");
+				//printf("\n");
 				pM1 = movement;
 				movement = 0;
 
@@ -729,10 +752,10 @@ int main(int argc, char* args[])
 
 				while (movement == 0) {
 					int randN = rand() % 4 + 1;
-					printf("%d", randN);
+					//printf("%d", randN);
 					if (randN == 1) {
 						if (upM2 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 1;
@@ -741,7 +764,7 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 2) {
 						if (downM2 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 2;
@@ -750,7 +773,7 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 3) {
 						if (leftM2 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 3;
@@ -759,7 +782,7 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 4) {
 						if (rightM2 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 4;
@@ -767,7 +790,7 @@ int main(int argc, char* args[])
 						}
 					}
 				}
-				printf("\n");
+				//printf("\n");
 				pM2 = movement;
 				movement = 0;
 
@@ -822,10 +845,10 @@ int main(int argc, char* args[])
 
 				while (movement == 0) {
 					int randN = rand() % 4 + 1;
-					printf("%d", randN);
+					//printf("%d", randN);
 					if (randN == 1) {
 						if (upM3 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 1;
@@ -833,7 +856,7 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 2) {
 						if (downM3 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 2;
@@ -841,7 +864,7 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 3) {
 						if (leftM3 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 3;
@@ -849,14 +872,14 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 4) {
 						if (rightM3 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 4;
 						}
 					}
 				}
-				printf("\n");
+				//printf("\n");
 				pM3 = movement;
 				movement = 0;
 
@@ -911,10 +934,10 @@ int main(int argc, char* args[])
 
 				while (movement == 0) {
 					int randN = rand() % 4 + 1;
-					printf("%d", randN);
+					//printf("%d", randN);
 					if (randN == 1) {
 						if (upM4 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 1;
@@ -922,7 +945,7 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 2) {
 						if (downM4 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 2;
@@ -930,7 +953,7 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 3) {
 						if (leftM4 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 3;
@@ -938,14 +961,14 @@ int main(int argc, char* args[])
 					}
 					else if (randN == 4) {
 						if (rightM4 == false) {
-							printf("r");
+							//printf("r");
 						}
 						else {
 							movement = 4;
 						}
 					}
 				}
-				printf("\n");
+				//printf("\n");
 				pM4 = movement;
 				movement = 0;
 				
@@ -961,7 +984,7 @@ int main(int argc, char* args[])
 				}
 				if (upKeyHeld) {
 					if (map[yc - 1][xc] != 4) {
-						printf("no");
+						//printf("no");
 						for (int i = 0; i < 32; i++) {
 							SDL_Delay(5);
 							ghostMovement();
@@ -985,7 +1008,7 @@ int main(int argc, char* args[])
 				}
 				else if (downKeyHeld) {
 					if (map[yc + 1][xc] != 4) {
-						printf("no");
+						//printf("no");
 						for (int i = 0; i < 32; i++) {
 							SDL_Delay(5);
 							ghostMovement();
@@ -1009,7 +1032,7 @@ int main(int argc, char* args[])
 				}
 				else if (leftKeyHeld) {
 					if (map[yc][xc - 1] != 4) {
-						printf("no");
+						//printf("no");
 						for (int i = 0; i < 32; i++) {
 							SDL_Delay(5);
 							ghostMovement();
@@ -1033,7 +1056,7 @@ int main(int argc, char* args[])
 				}
 				else if (rightKeyHeld) {
 					if (map[yc][xc + 1] != 4) {
-						printf("no");
+						//printf("no");
 						for (int i = 0; i < 32; i++) {
 							SDL_Delay(5);
 							ghostMovement();
