@@ -135,6 +135,62 @@ int map[MAP_HEIGHT][MAP_WIDTH] = {
 {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,} };
 
 
+//Ghost Movement Handler
+void ghostMovement() {
+	if (pM1 == 1) {
+		ghostY1--;
+	}
+	else if (pM1 == 2) {
+		ghostY1++;
+	}
+	else if (pM1 == 3) {
+		ghostX1--;
+	}
+	else if (pM1 == 4) {
+		ghostX1++;
+	}
+
+	if (pM2 == 1) {
+		ghostY2--;
+	}
+	else if (pM2 == 2) {
+		ghostY2++;
+	}
+	else if (pM2 == 3) {
+		ghostX2--;
+	}
+	else if (pM2 == 4) {
+		ghostX2++;
+	}
+
+	if (pM3 == 1) {
+		ghostY3--;
+	}
+	else if (pM3 == 2) {
+		ghostY3++;
+	}
+	else if (pM3 == 3) {
+		ghostX3--;
+	}
+	else if (pM3 == 4) {
+		ghostX3++;
+	}
+
+	if (pM4 == 1) {
+		ghostY4--;
+	}
+	else if (pM4 == 2) {
+		ghostY4++;
+	}
+	else if (pM4 == 3) {
+		ghostX4--;
+	}
+	else if (pM4 == 4) {
+		ghostX4++;
+	}
+}
+
+
 void drawMap(SDL_Renderer* renderer)
 {
 	// Walls, pellets, power pellets, pacman, ghosts
@@ -492,19 +548,6 @@ int main(int argc, char* args[])
 					}
 				}
 				printf("\n");
-
-				if (movement == 1) {
-					ghostY1 -= 32;
-				}
-				else if (movement == 2) {
-					ghostY1 += 32;
-				}
-				else if (movement == 3) {
-					ghostX1 -= 32;
-				}
-				else if (movement == 4) {
-					ghostX1 += 32;
-				}
 				pM1 = movement;
 				movement = 0;
 
@@ -594,19 +637,6 @@ int main(int argc, char* args[])
 					}
 				}
 				printf("\n");
-
-				if (movement == 1) {
-					ghostY2 -= 32;
-				}
-				else if (movement == 2) {
-					ghostY2 += 32;
-				}
-				else if (movement == 3) {
-					ghostX2 -= 32;
-				}
-				else if (movement == 4) {
-					ghostX2 += 32;
-				}
 				pM2 = movement;
 				movement = 0;
 
@@ -696,19 +726,6 @@ int main(int argc, char* args[])
 					}
 				}
 				printf("\n");
-
-				if (movement == 1) {
-					ghostY3 -= 32;
-				}
-				else if (movement == 2) {
-					ghostY3 += 32;
-				}
-				else if (movement == 3) {
-					ghostX3 -= 32;
-				}
-				else if (movement == 4) {
-					ghostX3 += 32;
-				}
 				pM3 = movement;
 				movement = 0;
 
@@ -798,19 +815,6 @@ int main(int argc, char* args[])
 					}
 				}
 				printf("\n");
-
-				if (movement == 1) {
-					ghostY4 -= 32;
-				}
-				else if (movement == 2) {
-					ghostY4 += 32;
-				}
-				else if (movement == 3) {
-					ghostX4 -= 32;
-				}
-				else if (movement == 4) {
-					ghostX4 += 32;
-				}
 				pM4 = movement;
 				movement = 0;
 				
@@ -827,7 +831,11 @@ int main(int argc, char* args[])
 				if (upKeyHeld) {
 					if (map[yc - 1][xc] != 4) {
 						printf("no");
-						SDL_Delay(160);
+						for (int i = 0; i < 32; i++) {
+							SDL_Delay(5);
+							ghostMovement();
+							screenUpdate(renderer);
+						}
 					}
 					else {
 						for (int i = 0; i < 32; i++) {
@@ -839,7 +847,7 @@ int main(int argc, char* args[])
 							}
 							pacManY--;
 							SDL_Delay(5);
-
+							ghostMovement();
 							screenUpdate(renderer);
 						}
 					}
@@ -847,7 +855,11 @@ int main(int argc, char* args[])
 				else if (downKeyHeld) {
 					if (map[yc + 1][xc] != 4) {
 						printf("no");
-						SDL_Delay(160);
+						for (int i = 0; i < 32; i++) {
+							SDL_Delay(5);
+							ghostMovement();
+							screenUpdate(renderer);
+						}
 					}
 					else {
 						for (int i = 0; i < 32; i++) {
@@ -859,7 +871,7 @@ int main(int argc, char* args[])
 							}
 							pacManY++;
 							SDL_Delay(5);
-
+							ghostMovement();
 							screenUpdate(renderer);
 						}
 					}
@@ -867,7 +879,11 @@ int main(int argc, char* args[])
 				else if (leftKeyHeld) {
 					if (map[yc][xc - 1] != 4) {
 						printf("no");
-						SDL_Delay(160);
+						for (int i = 0; i < 32; i++) {
+							SDL_Delay(5);
+							ghostMovement();
+							screenUpdate(renderer);
+						}
 					}
 					else {
 						for (int i = 0; i < 32; i++) {
@@ -879,7 +895,7 @@ int main(int argc, char* args[])
 							}
 							pacManX--;
 							SDL_Delay(5);
-
+							ghostMovement();
 							screenUpdate(renderer);
 						}
 					}
@@ -887,7 +903,11 @@ int main(int argc, char* args[])
 				else if (rightKeyHeld) {
 					if (map[yc][xc + 1] != 4) {
 						printf("no");
-						SDL_Delay(160);
+						for (int i = 0; i < 32; i++) {
+							SDL_Delay(5);
+							ghostMovement();
+							screenUpdate(renderer);
+						}
 					}
 					else {
 						for (int i = 0; i < 32; i++) {
@@ -899,13 +919,17 @@ int main(int argc, char* args[])
 							}
 							pacManX++;
 							SDL_Delay(5);
-
+							ghostMovement();
 							screenUpdate(renderer);
 						}
 					}
 				}
 				else {
-					SDL_Delay(160);
+					for (int i = 0; i < 32; i++) {
+						SDL_Delay(5);
+						ghostMovement();
+						screenUpdate(renderer);
+					}
 				}
 				if (map[yc + 1][xc + 1] == 5 || map[yc + 1][xc + 1] == 8) {
 					if (map[yc + 1][xc + 1] == 5) {
